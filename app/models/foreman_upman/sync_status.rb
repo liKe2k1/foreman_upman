@@ -16,7 +16,7 @@ module ForemanUpman
 
 
     def get_progress_in_percent
-      return ((self.packages_count.to_f / self.packages_processed.to_f) * 100).to_f.round(1)
+      return ((self.packages_processed.to_f / self.packages_count.to_f) * 100).to_f.round(1)
     end
   end
 end
