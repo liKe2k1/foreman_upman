@@ -1,0 +1,17 @@
+<%= form_for @repository, as: :repository, url: (@repository.new_record? ? repositories_path : repository_path(@repository)) do |f| %>
+  <%= base_errors_for @repository %>
+
+  <%= selectable_f f, :channel_id,
+                   options_from_collection_for_select(ForemanUpman::Channel.all, 'id', 'name', @repository.channel_id),
+                   {:include_blank => _('Choose a channel')},
+                   {:label => _('Channel'),
+                    :help_inline => :indicator, :required => true} %>
+
+  <%= text_f f, :label, required: true, help_inline: _('Only for identification, no internal use.') %>
+  <%= text_f f, :dist, required: true, help_inline: _('Distribution Codename [stretch,buster,bionic,cosmic...]')  %>
+  <%= text_f f, :component, required: true, help_inline: _('Repository component. On debian you can use main, non-free and contrib. Ubuntu wants main, reserved, multiverse and universe')  %>
+  <%= textarea_f f, :gpg_key, rows: 10, required: false, help_inline: _('Currently unused')  %>
+
+  <%= submit_or_cancel f %>
+<% end %>
+

@@ -1,0 +1,39 @@
+<% title _("Channels") %>
+<% title_actions new_link(_("Create channel")), help_button %>
+
+<table class="<%= table_css_classes 'table-fixed' %>">
+  <thead>
+  <tr>
+    <th><%= sort :name, :as => s_("Name")  %></th>
+    <th><%= sort :architecture, :as => s_("Architecture")  %></th>
+    <th><%= sort :base_url, :as => s_("Base URL")  %></th>
+    <th class="col-md-1"><%= _("Actions") %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% for channel in @channels %>
+    <tr>
+      <td class='ellipsis'><%= link_to_if_authorized channel.name, {:action => :show, :id => channel}, :title => channel.name %></td>
+      <td><%= h channel.architecture %></td>
+      <td><%= h channel.base_url %></td>
+      <td>
+        <%= action_buttons(
+                display_link_if_authorized(
+                    _("Edit"),
+                    hash_for_edit_channel_path(:id => channel).merge(:auth_object => channel, :authorizer => authorizer)
+                ),
+                display_delete_if_authorized(
+                    hash_for_channel_path(:id => channel).merge(:auth_object => channel, :authorizer => authorizer),
+                    id: 'init-modal',
+                    href: '#',
+                    data: { objecttype: 'channel',
+                            objectid: channel.id,
+                            objectname: channel.to_label }
+                )
+            ) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= will_paginate_with_info @channels, :more => " - "+_("<b class='select_count'>0</b> selected") %>

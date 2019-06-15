@@ -1,0 +1,77 @@
+<% title h(@channel.name) %>
+<%= breadcrumbs(items: [{caption: _('Channels'), url: channels_path}, {caption: _(@channel.to_label)}]) %>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong><%= _("Channel") %></strong>
+      </div>
+
+      <table class="<%= table_css_classes 'table-fixed nonmarginbottom' %>">
+        <tbody>
+        <tr>
+          <td><%= _("Name") %></td>
+          <td>
+            <%= @channel.name %>
+          </td>
+        </tr>
+        <tr>
+          <td><%= _("Label") %></td>
+          <td>
+            <%= @channel.label %>
+          </td>
+        <tr>
+          <td><%= _("Architecture") %></td>
+          <td>
+            <%= @channel.architecture %>
+          </td>
+        </tr>
+        <tr>
+          <td><%= _("Base URL") %></td>
+          <td>
+            <%= @channel.base_url %>
+          </td>
+        </tr>
+        </tr>
+        <tr>
+          <td><%= _("Repository Checksum Type") %></td>
+          <td>
+            <%= @channel.repository_checksum_type %>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong><%= _("Repository statistics") %></strong>
+
+
+      </div>
+      <table class="table table-bordered table-striped table-hover table-fixed nonmarginbottom">
+        <thead>
+        <tr>
+          <th><%= _('Assigned repositories') %></th>
+          <th><%= _('Package count') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for repository in @channel.repositories %>
+          <tr>
+            <td><%= link_to repository.label, hash_for_repository_path(repository.id) %></td>
+            <td><%= repository.packages_count %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+
+    </div>
+
+  </div>
+
+</div>

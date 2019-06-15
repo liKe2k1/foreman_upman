@@ -1,0 +1,14 @@
+.update-manager-status {
+  li {
+    h4 {
+      float: right;
+      line-height: 10px;
+    }
+  }
+
+  .total {
+    border-top: 1px solid #ddd;
+    text-align: right;
+    padding-top: 10px;
+  }
+}

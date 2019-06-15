@@ -1,0 +1,60 @@
+<% title h(@erratum.synopsis) %>
+
+<%= breadcrumbs(items: [
+    {caption: _("Errata"), url: errata_path},
+    {caption: _("%s") % @erratum.synopsis, url: errata_path(@erratum)},
+]) %>
+
+
+
+<div class="row">
+  <div class="col-md-6">
+    <h2>Details</h2>
+    <table class="<%= table_css_classes %>">
+      <tbody>
+      <tr>
+        <td class="col-md-6">Advisory</td>
+        <td><%= @erratum.get_advisory_name %></td>
+      </tr>
+
+      <tr>
+        <td class="col-md-6">CVEs</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td class="col-md-6">Type</td>
+        <td><%= @erratum.errata_type %></td>
+      </tr>
+
+      <tr>
+        <td class="col-md-6">Issued</td>
+        <td><%= @erratum.date %></td>
+      </tr>
+
+      <tr>
+        <td class="col-md-6">Reboot suggested?</td>
+        <td><%= @erratum.reboot == true ? _('Yes') : _('No') %></td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+
+    <h2>Description</h2>
+    <%= nl2br @erratum.description %>
+  </div>
+
+  <div class="col-md-6">
+
+    <h2>Affected packages</h2>
+
+    <% @erratum.get_packages_as_hash.each do |dist| %>
+      <h2>Distribution <%= dist[0] %></h2>
+      <% dist[1].each do |package| %>
+        <code><%= package %></code>
+      <% end %>
+    <% end %>
+  </div>
+</div>

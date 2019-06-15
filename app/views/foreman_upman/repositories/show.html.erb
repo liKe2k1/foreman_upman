@@ -1,0 +1,120 @@
+<% javascript 'foreman_upman/repository' %>
+<% javascript 'foreman_upman/packages/list' %>
+
+<% title h(@repository.label) %>
+
+<%= breadcrumbs(items: [
+    {caption: _("Repositories"), url: repositories_path},
+    {caption: _("%s") % @repository.label, url: repository_path(@repository)},
+]) %>
+
+<% if @sync_progress.present? %>
+  <div class="alert alert-warning">
+    <span class="pficon pficon-info"></span>
+    <%= _('There is a sync process at %s running since %s') % [@sync_progress.get_progress_in_percent, time_ago_in_words(@sync_progress.created_at)] %>
+    <%=
+      display_link_if_authorized(
+          _("Show detailed progress"),
+          hash_for_sync_progress_repositories_path(:id => @repository, :uuid => @sync_progress.uuid)
+      )
+    %>
+  </div>
+<% end %>
+
+<div class="btn-toolbar pull-right">
+  <% unless @sync_progress.present? %>
+    <%= link_to_if_authorized _('Synchronize'), hash_for_sync_repositories_path(:id => @repository), :class => 'btn btn-success', :data => {turbolinks: false} %>
+  <% end %>
+  <%= link_to_if_authorized _('Edit'), hash_for_edit_repository_path(:id => @repository), :class => 'btn btn-primary', :data => {turbolinks: false} %>
+  <%= link_to_if_authorized _('Delete'), hash_for_edit_repository_path(:id => @repository), :class => 'btn btn-danger', :data => {turbolinks: false} %>
+</div>
+
+<ul id="repository-tab" class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#repositories" aria-controls="repositories" role="tab" data-toggle="tab"><%= _('Repository') %></a></li>
+  <li role="presentation">
+    <a href="#packages" aria-controls="packages" role="tab" data-toggle="tab"><%= _('Packages') %></a></li>
+</ul>
+
+<div id="repository-tab-content" class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="repositories">
+    <div class="row">
+      <div class="col-md-6">
+        <table class="<%= table_css_classes %>">
+          <thead>
+          <tr>
+            <th colspan="2"><%= _("Repository") %></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><%= _("Channel") %></td>
+            <td>
+              <%= @repository.channel.name %>
+            </td>
+          </tr>
+          <tr>
+            <td><%= _("Label") %></td>
+            <td>
+              <%= @repository.label %>
+            </td>
+          </tr>
+          <tr>
+            <td><%= _("Distribution") %></td>
+            <td>
+              <%= @repository.dist %>
+            </td>
+          </tr>
+          <tr>
+            <td><%= _("Components") %></td>
+            <td>
+              <%= @repository.component %>
+            </td>
+          </tr>
+          <tr>
+            <td><%= _("URL") %></td>
+            <td>
+              <%= @repository.build_mirror_url %>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong><%= _("Contents") %></strong>
+          </div>
+          <div class="panel-body">
+            There are currently <%= @repository.packages_count %> packages in this repository
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="pficon pficon-info"></span>
+            <p>First install apt-transport-https</p>
+            <code>
+              sudo apt install apt-transport-https
+            </code>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong><%= _("sources.list") %></strong><br>
+          </div>
+          <div class="panel-body">
+            <code>
+              deb <%= @repository.channel.base_url %>/ <%= @repository.dist %> <%= @repository.component %>
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="packages">
+    <span data-ajax-url="<%= pane_table_packages_path(:repository_id => @repository.id) %>" data-on-complete="activatePackageDataTable"><%= spinner %> <%= _('Loading package list') %></span>
+  </div>
+</div>

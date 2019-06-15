@@ -1,0 +1,8 @@
+<% title _("Edit %s") % @repository.label %>
+
+<%= breadcrumbs(items: [
+    {caption: _("Repositories"), url: repositories_path},
+    {caption: _("%s") % @repository.label, url: repository_path(@repository)}, {caption: _('Edit')}
+]) %>
+
+<%= render 'form' %>

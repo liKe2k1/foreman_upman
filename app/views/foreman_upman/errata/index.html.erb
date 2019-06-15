@@ -1,0 +1,28 @@
+<% title _("Errata") %>
+
+<%= link_to_if_authorized _('Manual update'), hash_for_sync_errata_path, :class => 'btn btn-success', :data => {turbolinks: false} %>
+
+<table class="<%= table_css_classes 'table-fixed' %>">
+  <thead>
+  <tr>
+    <th><%= sort :errata_id, :as => s_("Errata ID")  %></th>
+    <th><%= sort :synopsis, :as => s_("Subject")  %></th>
+    <th><%= sort :errata_type, :as => s_("Type")  %></th>
+    <th><%= sort :data, :as => s_("Report date")  %></th>
+    <th class="col-md-1"><%= _("Actions") %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% for errata in @erratas %>
+    <tr>
+      <td class='ellipsis'><%= link_to_if_authorized "#{errata.category} #{errata.errata_id}-#{errata.release}", {:action => :show, :id => errata}, :title => "#{errata.category} #{errata.errata_id}-#{errata.release}" %></td>
+      <td><%= h errata.subject %></td>
+      <td><i class="pf-warning"></i><%= h errata.errata_type %></td>
+      <td><%= errata.date %></td>
+      <td>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= will_paginate_with_info @erratas, :more => " - "+_("<b class='select_count'>0</b> selected") %>

@@ -1,0 +1,5 @@
+<% title _("Edit %s") % @channel.label %>
+
+<%= breadcrumbs(items: [{caption: _("Channel %s") % @channel.label, url: channel_path(@channel)}, {caption: _('Edit %s' % @channel.to_label)}]) %>
+
+<%= render 'form' %>

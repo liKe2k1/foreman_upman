@@ -1,0 +1,41 @@
+<% title _("Repositories") %>
+<% title_actions new_link(_("Create repository")), help_button %>
+
+<table class="<%= table_css_classes 'table-fixed' %>">
+  <thead>
+  <tr>
+    <th><%= sort :label, :as => s_("Label")  %></th>
+    <th><%= sort :url, :as => s_("URL")  %></th>
+    <th><%= sort :channel, :as => s_("Channel")  %></th>
+    <th><%=_("Sync Status") %></th>
+    <th class="col-md-1"><%= _("Actions") %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% for repository in @repositories %>
+    <tr>
+      <td class='ellipsis'><%= link_to_if_authorized repository.label, {:action => :show, :id => repository}, :title => repository.label %></td>
+      <td><%= h repository.build_mirror_url %></td>
+      <td><%= h repository.channel.name %> (<%= h repository.packages_count %> packages)</td>
+      <td><%= repository.get_last_successfull_sync %></td>
+      <td>
+        <%= action_buttons(
+                display_link_if_authorized(
+                    _("Edit"),
+                    hash_for_edit_repository_path(:id => repository).merge(:auth_object => repository, :authorizer => authorizer)
+                ),
+                display_delete_if_authorized(
+                    hash_for_repository_path(:id => repository).merge(:auth_object => repository, :authorizer => authorizer),
+                    id: 'init-modal',
+                    href: '#',
+                    data: { objecttype: 'repository',
+                            objectid: repository.id,
+                            objectname: repository.to_label }
+                )
+            ) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= will_paginate_with_info @repositories, :more => " - "+_("<b class='select_count'>0</b> selected") %>

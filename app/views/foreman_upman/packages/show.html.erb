@@ -1,0 +1,96 @@
+<% title _("Package #{@package.name}") %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @package.name %> <%= @package.version %> <span class="text-success"><i class="pficon-security"></i> No security related items found</span></h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <table style="width: 100%">
+          <tbody>
+          <tr>
+            <td>Package</td>
+            <td><%= @package.name %></td>
+          </tr>
+          <tr>
+            <td>Installed Size</td>
+            <td><%= @package.installed_size %> Bytes</td>
+          </tr>
+          <tr>
+            <td>Architecture</td>
+            <td><%= @package.architecture %></td>
+          </tr>
+          <tr>
+            <td>File</td>
+            <td><%= @package.filename %></td>
+          </tr>
+          <tr>
+            <td>Maintainers</td>
+            <td><% @package.maintainers.each_with_index  do |maintainer, i| %>
+                <%= maintainer.name %><%= ',' if i < (@package.maintainers.size - 1) %>
+              <% end %></td>
+          </tr>
+          <tr>
+            <td>Tags</td>
+            <td><% @package.tags.each_with_index  do |tag, i| %>
+                <%= tag.label %><%= ',' if i < (@package.tags.size - 1) %>
+              <% end %></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <h2>Description</h2>
+        <p>
+          <%= @package.description %>
+        </p>
+
+      </div>
+      <div class="col-md-6">
+        <table style="width: 100%">
+          <tbody>
+          <tr>
+            <td colspan="2"><strong>Host information</strong></td>
+          </tr>
+          <tr>
+            <td><span class="label" style="background-color:#4572A7">&nbsp;</span> Installed on hosts</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td><span class="label" style="background-color:#89A54E">&nbsp;</span> Latest version installed</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td><span class="label" style="background-color:#DB843D">&nbsp;</span> Update available</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td><span class="label" style="background-color:#AA4643">&nbsp;</span> Critical security for hosts</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="2"><strong>Repository information</strong></td>
+          </tr>
+          <tr>
+            <td>Channel</td>
+            <td><%= @package.repository.channel.name %></td>
+          </tr>
+          <tr>
+            <td>Repository</td>
+            <td><%= @package.repository.label %></td>
+          </tr>
+          </tbody>
+        </table>
+
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
