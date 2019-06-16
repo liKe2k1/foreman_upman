@@ -24,6 +24,10 @@
                     _("Edit"),
                     hash_for_edit_repository_path(:id => repository).merge(:auth_object => repository, :authorizer => authorizer)
                 ),
+                display_link_if_authorized(
+                    _("Syncronize"),
+                    hash_for_sync_repository_path(:id => repository).merge(:auth_object => repository, :authorizer => authorizer)
+                ),
                 display_delete_if_authorized(
                     hash_for_repository_path(:id => repository).merge(:auth_object => repository, :authorizer => authorizer),
                     id: 'init-modal',
