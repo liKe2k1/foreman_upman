@@ -45,7 +45,7 @@ module ForemanUpman
           return "Finished"
         end
         if sync_status.status == 'update'
-          return "In progress (%s %)" % sync_status.get_progress_in_percent
+          return "In progress (#{sync_status.get_progress_in_percent}%)"
         end
         if sync_status.status == 'failed'
           return "Failed"
