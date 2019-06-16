@@ -1,5 +1,6 @@
 <% title _("Channels") %>
 <% title_actions new_link(_("Create channel")), help_button %>
+<% title_actions display_link_if_authorized(_("Create channel (auto-detect)"), hash_for_wizard_channels_path, {:class => "btn btn-primary"}) %>
 
 <table class="<%= table_css_classes 'table-fixed' %>">
   <thead>

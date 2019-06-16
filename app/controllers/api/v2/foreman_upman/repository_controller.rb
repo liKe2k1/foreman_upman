@@ -15,6 +15,14 @@ module Api
           @repository = resource_scope_for_index
         end
 
+        api :GET, "/upman/repository/lookup/:base_url/:dist_code/", N_("Lookup a repository and print its details")
+        param :base_url, String, :required => true, :desc => N_("URL to repository")
+        param :codename, String, :required => true, :desc => N_("Distribution codename ")
+        def lookup
+          lookup = ::ForemanUpman::RepositoryLib::Lookup.new
+          @lookup_dao = lookup.perform(params[:base_url], params[:codename])
+        end
+
         api :GET, "/upman/repository/:id/", N_("Show a repository")
         param :id, :identifier, :required => true
         def show

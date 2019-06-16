@@ -10,6 +10,9 @@ module ForemanUpman
     config.autoload_paths += Dir["#{config.root}/app/services/errata"]
     config.autoload_paths += Dir["#{config.root}/app/services/errata/plugin"]
 
+
+    config.eager_load_paths <<  "#{config.root}/app/lib"
+
     # Add any db migrations
     initializer 'foreman_upman.load_app_instance_data' do |app|
       ForemanUpman::Engine.paths['db/migrate'].existent.each do |path|
@@ -38,7 +41,7 @@ module ForemanUpman
           },
                      :resource_type => 'ForemanUpman::Channels'
           permission :create_channels, {
-              :'foreman_upman/channels' => %i[new create]
+              :'foreman_upman/channels' => %i[new create wizard]
           },
                      :resource_type => 'ForemanUpman::Channels'
           permission :edit_channels, {
@@ -121,6 +124,15 @@ module ForemanUpman
     initializer 'foreman_upman.configure_assets', group: :assets do
       SETTINGS[:foreman_upman] = {assets: {precompile: assets_to_precompile}}
     end
+
+    #
+    # Later stuff for install updates on remote targets
+    #
+    #initializer 'foreman_upman.require_dynflow', :before => 'foreman_tasks.initialize_dynflow' do |app|
+    #  ForemanTasks.dynflow.require!
+    #  ForemanTasks.dynflow.config.queues.add(DYNFLOW_QUEUE, :pool_size => Setting['upman_workers_pool_size']) if Setting.table_exists? rescue(false)
+    #  ForemanTasks.dynflow.config.eager_load_paths << File.join(ForemanUpman::Engine.root, 'app/lib/actions')
+    #end
 
     # Include concerns in this config.to_prepare block
     config.to_prepare do

@@ -9,6 +9,7 @@ Foreman::Application.routes.draw do
             get :auto_complete_search
             get :sync
             get :sync_status
+            get :lookup
           end
         end
         resources :packages do
@@ -30,7 +31,10 @@ Foreman::Application.routes.draw do
     resources :channels do
       collection do
         get :auto_complete_search
+        get :wizard
+        post :create_from_wizard
       end
+
     end
     resources :config
     resources :status

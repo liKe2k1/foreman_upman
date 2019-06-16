@@ -1,10 +1,9 @@
 class SyncRepositoryJob < ApplicationJob
   queue_as :default
 
-  include ForemanUpman::PackageHelper
-
   def perform(repository)
-    @packages = sync_package_file(repository, {
+    sync_packages = SyncPackages.new
+    sync_packages.start_job(repository, {
         uuid: self.job_id
     })
   end

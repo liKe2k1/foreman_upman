@@ -26,4 +26,10 @@ class SyncService
     @sync_status.save
   end
 
+  def failed()
+    logger.info "[SyncService] Error in sync process"
+    @sync_status.status = 'failed'
+    @sync_status.save
+  end
+
 end

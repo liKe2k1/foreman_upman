@@ -12,6 +12,7 @@ module ForemanUpman
       @repository = ForemanUpman::Repository.new
     end
 
+
     def show
       @repository = resource_base.includes(:channel).find(params[:id])
       @sync_progress = SyncStatus.where("status" => "update").where("repository_id" => @repository.id).first
@@ -32,6 +33,7 @@ module ForemanUpman
     end
 
     def sync
+
       @repository.schedule_sync
       redirect_to action: "show", id: @repository.id
     end

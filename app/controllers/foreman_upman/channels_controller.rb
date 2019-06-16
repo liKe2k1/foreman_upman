@@ -14,6 +14,17 @@ module ForemanUpman
       @channel = ForemanUpman::Channel.new
     end
 
+    def wizard
+      @channel = ForemanUpman::Channel.new
+    end
+
+    def create_from_wizard
+      success "The channel and repositories created successfully"
+
+      redirect_to action: "index"
+    end
+
+
     def create
       @channel = ForemanUpman::Channel.new(channel_params)
       if @channel.save

@@ -15,6 +15,9 @@ module Api
           @repository = resource_scope_for_index
         end
 
+
+
+
         api :GET, "/upman/repository/:id/", N_("Show a repository")
         param :id, :identifier, :required => true
         def show
