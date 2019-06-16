@@ -9,7 +9,7 @@ module ForemanUpman
     validates :architecture, presence: true
     validates :description, presence: true
     validates :multi_arch, presence: false
-    validates :description_md5, presence: true
+    validates :description_md5, presence: false
     validates :section, presence: false
     validates :filename, presence: true
     validates :size, presence: true
