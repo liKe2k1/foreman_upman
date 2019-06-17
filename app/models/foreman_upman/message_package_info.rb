@@ -1,5 +1,5 @@
 module ForemanUpman
-  class MessagePackageInfo < ActiveRecord::Base
+  class MessagePackageInfo < ApplicationRecord
 
     validates :release, presence: true
     validates :file, presence: true

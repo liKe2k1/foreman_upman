@@ -1,5 +1,5 @@
 module ForemanUpman
-  class PackageTags < ActiveRecord::Base
+  class PackageTags < ApplicationRecord
     self.table_name = 'upman_package_tags'
     include ScopedSearchExtensions
 

@@ -11,3 +11,5 @@ locale/*/*.po.time_stamp
 locale/*/*.pox
 .idea/
 .scripts/
+/docker.d/database.yml
+/docker.d/settings.yaml

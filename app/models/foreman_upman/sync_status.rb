@@ -1,5 +1,5 @@
 module ForemanUpman
-  class SyncStatus < ActiveRecord::Base
+  class SyncStatus < ApplicationRecord
     self.table_name = 'upman_sync_status'
     include ScopedSearchExtensions
 

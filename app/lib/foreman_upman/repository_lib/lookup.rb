@@ -1,6 +1,5 @@
 module ForemanUpman
   module RepositoryLib
-
     class Lookup
 
       require 'uri'
@@ -15,9 +14,9 @@ module ForemanUpman
       def perform(base_url, codename)
 
         base_url_cleaned = URI.decode(base_url).sub(/(\/)+$/,'')
-        logger.info "Download Release from #{base_url_cleaned}/#{codename}/"
+        logger.info "Download Release from #{base_url_cleaned}/dists/#{codename}/"
 
-        package_file = download_to_string(base_url_cleaned + "/" + codename + "/Release")
+        package_file = download_to_string(base_url_cleaned + "/dists/" + codename + "/Release")
         release_data = _parse_release_file(package_file)
 
         lookup_dao = ForemanUpman::Dao::Lookup.new

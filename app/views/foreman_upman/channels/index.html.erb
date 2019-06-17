@@ -25,11 +25,7 @@
                 ),
                 display_delete_if_authorized(
                     hash_for_channel_path(:id => channel).merge(:auth_object => channel, :authorizer => authorizer),
-                    id: 'init-modal',
-                    href: '#',
-                    data: { objecttype: 'channel',
-                            objectid: channel.id,
-                            objectname: channel.to_label }
+                    :data => { :confirm => (_("Delete %s?") % channel.name) }
                 )
             ) %>
       </td>

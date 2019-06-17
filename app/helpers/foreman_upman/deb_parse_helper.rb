@@ -49,9 +49,18 @@ module ForemanUpman
 
     def _get_hashed_values(body)
       result = {}
-      body.scan(/([A-Za-z-]+): (.+)/).each do |match|
+      body.scan(/([\w-]+): (.+)/).each do |match|
         key = match[0].downcase.gsub("-", "_")
         result[key] = match[1]
+      end
+      result
+    end
+
+
+    def _get_hashed_values_simple(body)
+      result = {}
+      body.each_line do |line|
+        p line.split(":", 2)
       end
       result
     end

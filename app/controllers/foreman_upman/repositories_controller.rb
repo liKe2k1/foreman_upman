@@ -33,8 +33,10 @@ module ForemanUpman
     end
 
     def sync
-
-      @repository.schedule_sync
+      parser = PackageLib::Parser.new
+      parser.parse(@repository)
+      #@repository.schedule_sync
+      #redirect_to action: "index"
       redirect_to action: "show", id: @repository.id
     end
 

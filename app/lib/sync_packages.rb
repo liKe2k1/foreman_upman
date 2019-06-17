@@ -10,6 +10,8 @@ module ForemanUpman
     ##
     def start_job(repository, options)
 
+      synchronize = ForemanUpman::RepositoryLib::Synchronize.new
+
       tmp_file = RepositoryService.fetch_repository_information(repository)
 
       body = gunzip_file_to_string(tmp_file)

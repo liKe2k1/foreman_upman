@@ -1,8 +1,6 @@
 class CreateSyncStatus < ActiveRecord::Migration[4.2]
-  def change
-
+  def up
     create_table :upman_sync_status do |t|
-
       t.integer :repository_id
       t.string :uuid
       t.integer :packages_count
@@ -11,10 +9,12 @@ class CreateSyncStatus < ActiveRecord::Migration[4.2]
       t.string :last_package_name
       t.string :status
       t.timestamps null: false
-
     end
+    add_index(:upman_sync_status, :uuid, unique: true)
+  end
 
-    add_index(:upman_sync_status, [:uuid], unique: true)
-
+  def down
+    remove_index :upman_sync_status, :uuid
+    drop_table :upman_sync_status
   end
 end

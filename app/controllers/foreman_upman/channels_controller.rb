@@ -4,7 +4,7 @@ module ForemanUpman
     include Foreman::Controller::AutoCompleteSearch
     include ForemanUpman::Controller::Parameters::Channels
 
-    before_action :find_resource, only: [:edit, :update]
+    before_action :find_resource, only: [:edit, :update, :destroy]
 
     def index
       @channels = resource_base_search_and_page
@@ -15,11 +15,14 @@ module ForemanUpman
     end
 
     def wizard
-      @channel = ForemanUpman::Channel.new
+      @channel_wizard = ForemanUpman::Dao::ChannelWizard.new
     end
 
     def create_from_wizard
       success "The channel and repositories created successfully"
+
+      wizard = ForemanUpman::RepositoryLib::Wizard.new
+      wizard.create(params)
 
       redirect_to action: "index"
     end
@@ -50,7 +53,7 @@ module ForemanUpman
     end
 
     def destroy
-      if @channel.destroy
+      if @channel.destroy_all
         process_success success_redirect: channels_path
       else
         process_error object: @channel

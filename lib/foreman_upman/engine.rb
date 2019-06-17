@@ -11,7 +11,7 @@ module ForemanUpman
     config.autoload_paths += Dir["#{config.root}/app/services/errata/plugin"]
 
 
-    config.eager_load_paths <<  "#{config.root}/app/lib"
+    config.eager_load_paths << "#{config.root}/app/lib"
 
     # Add any db migrations
     initializer 'foreman_upman.load_app_instance_data' do |app|
@@ -38,38 +38,30 @@ module ForemanUpman
           ## Channels
           permission :view_channels, {
               :'foreman_upman/channels' => [:index]
-          },
-                     :resource_type => 'ForemanUpman::Channels'
+          }, :resource_type => 'ForemanUpman::Channels'
           permission :create_channels, {
-              :'foreman_upman/channels' => %i[new create wizard]
-          },
-                     :resource_type => 'ForemanUpman::Channels'
+              :'foreman_upman/channels' => %i[new create wizard create_from_wizard]
+          }, :resource_type => 'ForemanUpman::Channels'
           permission :edit_channels, {
               :'foreman_upman/channels' => %i[edit update]
-          },
-                     :resource_type => 'ForemanUpman::Channels'
+          }, :resource_type => 'ForemanUpman::Channels'
           permission :destroy_channels, {
               :'foreman_upman/channels' => [:destroy]
-          },
-                     :resource_type => 'ForemanUpman::Channels'
+          }, :resource_type => 'ForemanUpman::Channels'
 
           ## Repositories
           permission :view_repositories, {
               :'foreman_upman/repositories' => [:index]
-          },
-                     :resource_type => 'ForemanUpman::Repositories'
+          }, :resource_type => 'ForemanUpman::Repositories'
           permission :create_repositories, {
               :'foreman_upman/repositories' => %i[new create]
-          },
-                     :resource_type => 'ForemanUpman::Repositories'
+          }, :resource_type => 'ForemanUpman::Repositories'
           permission :edit_repositories, {
               :'foreman_upman/repositories' => %i[edit update]
-          },
-                     :resource_type => 'ForemanUpman::Repositories'
+          }, :resource_type => 'ForemanUpman::Repositories'
           permission :destroy_repositories, {
               :'foreman_upman/repositories' => [:destroy]
-          },
-                     :resource_type => 'ForemanUpman::Repositories'
+          }, :resource_type => 'ForemanUpman::Repositories'
           permission :sync_repositories, {
               :'foreman_upman/repositories' => %i[sync sync_progress]
           }, :resource_type => 'ForemanUpman::Repositories'
@@ -81,16 +73,16 @@ module ForemanUpman
         end
 
         MANAGER = [
-          :view_channels,
-          :create_channels,
-          :edit_channels,
-          :destroy_channels,
-          :view_repositories,
-          :create_repositories,
-          :edit_repositories,
-          :destroy_repositories,
-          :sync_repositories,
-          :view_packages
+            :view_channels,
+            :create_channels,
+            :edit_channels,
+            :destroy_channels,
+            :view_repositories,
+            :create_repositories,
+            :edit_repositories,
+            :destroy_repositories,
+            :sync_repositories,
+            :view_packages
         ]
         role 'UpMan Manager', MANAGER
         add_all_permissions_to_default_roles

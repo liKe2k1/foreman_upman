@@ -4,28 +4,25 @@
 
 <%= breadcrumbs(items: [{caption: _('Channel'), url: channels_path}, {caption: _("Create channel (auto-detect)")}]) %>
 
-<%= form_for @channel, as: :channel, url: create_from_wizard_channels_path do |f| %>
-  <%= base_errors_for @channel %>
+<%= form_for @channel_wizard, as: :wizard, url: create_from_wizard_channels_path do |f| %>
+  <%= base_errors_for @channel_wizard %>
 
-  <%= text_f f, :base_url, required: true, help_inline: _('Base URL to repository (e.g. http://ftp2.de.debian.org/debian/dists)') %>
+  <%= text_f f, :base_url, required: true, help_inline: _('Base URL to repository (e.g. http://ftp2.de.debian.org/debian)') %>
+  <%= text_f f, :codename, required: true, help_inline: _('Distribution code (e.g. stretch)') %>
 
-  <div class="form-group "><label class="col-md-2 control-label" for="dist_code">Distribution *</label>
-    <div class="col-md-4">
-      <input class="form-control " name="channel[dist_code]" id="channel_dist_code" type="text"><span class="help-block"></span>
-    </div>
-    <span class="help-block help-inline">Distribution code (e.g. stretch)</span>
-  </div>
-
+  <%= f.hidden_field :origin %>
+  <%= f.hidden_field :label %>
+  <%= f.hidden_field :version %>
+  <%= f.hidden_field :suite %>
+  <%= f.hidden_field :description  %>
   <div class="form-group">
     <div class="col-md-offset-2 col-md-4">
       <%= link_to_function(_('Lookup repository'), "lookupRepository();", {:id => 'btn-trigger-lookup', :class => 'btn btn-info disabled'}) %>
-
       <div id="lookup-process-failed" class="alert alert-danger hidden">
         <br>
         <span class="pficon pficon-error-circle-o"></span>
         <strong><%= _('Could not retrieve repository informations') %></strong>
       </div>
-
       <div id="lookup-process" class="hidden">
         <br>
         <p><span class="spinner spinner-xs spinner-inline"></span> Fetching latest repository informations...</p>
@@ -36,7 +33,6 @@
   <div id="repository-details" class="hidden">
     <div class="form-group">
       <div class="col-md-offset-2 col-md-4">
-
         <div class="panel panel-default">
           <div class="panel-heading">
             <strong><%= _("Repository details") %></strong>
@@ -44,27 +40,12 @@
           <table class="<%= table_css_classes %>">
             <tbody id="dt-release-data"></tbody>
           </table>
-
         </div>
       </div>
-
     </div>
 
-    <div class="form-group">
-      <label class="col-md-2 control-label" for="component-selector">Select components *</label>
-      <div class="col-md-4">
-        <select id="component-selector" class="form-control without_jquery_multiselect" multiple></select>
-        <span class="help-block"></span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-md-2 control-label" for="arch-selector">Select architectures *</label>
-      <div class="col-md-4">
-        <select id="arch-selector" class="form-control without_jquery_multiselect" multiple></select>
-        <span class="help-block"></span>
-      </div>
-    </div>
+    <%= upman_selectable_f(f, :components, [], {}, { :label => _('Components *'), :multiple => true, :class => 'without_jquery_multiselect'}) %>
+    <%= upman_selectable_f(f, :architectures, [], {}, { :label => _('Architectures *'), :multiple => true, :class => 'without_jquery_multiselect'}) %>
 
     <%= submit_or_cancel f %>
 

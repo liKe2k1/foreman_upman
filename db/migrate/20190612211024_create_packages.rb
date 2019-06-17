@@ -21,7 +21,6 @@ class CreatePackages < ActiveRecord::Migration[4.2]
       t.timestamps null: false
 
     end
-
     add_index(:upman_packages, [:name, :version], unique: true)
     add_index(:upman_packages, [:repository_id], unique: false)
 

@@ -1,5 +1,5 @@
 module ForemanUpman
-  class Package < ActiveRecord::Base
+  class Package < ApplicationRecord
     self.table_name = 'upman_packages'
     include ScopedSearchExtensions
 
@@ -19,10 +19,10 @@ module ForemanUpman
 
     belongs_to :repository, :class_name => 'ForemanUpman::Repository'
 
-    has_many :package_tags, :class_name => 'ForemanUpman::PackageTags', :dependent => :destroy
+    has_many :package_tags, :class_name => 'ForemanUpman::PackageTags', :dependent => :delete_all
     has_many :tags, :through => :package_tags
 
-    has_many :package_maintainers, :class_name => 'ForemanUpman::PackageMaintainers', :dependent => :destroy
+    has_many :package_maintainers, :class_name => 'ForemanUpman::PackageMaintainers', :dependent => :delete_all
     has_many :maintainers, :through => :package_maintainers
 
 

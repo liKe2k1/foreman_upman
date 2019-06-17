@@ -29,5 +29,6 @@ module ForemanUpman
       tmp_file = download(url)
       File.open(tmp_file, 'rb') { |f| f.read }
     end
+
   end
 end

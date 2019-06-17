@@ -1,5 +1,5 @@
 module ForemanUpman
-  class Maintainer < ActiveRecord::Base
+  class Maintainer < ApplicationRecord
     self.table_name = 'upman_maintainers'
     include ScopedSearchExtensions
 

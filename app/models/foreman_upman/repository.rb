@@ -33,6 +33,7 @@ module ForemanUpman
       return channel.base_url + "/dists/" + self.dist + "/" + self.component
     end
 
+
     def schedule_sync
       scheduler = SyncRepositoryJob
       return scheduler.perform_later(self)

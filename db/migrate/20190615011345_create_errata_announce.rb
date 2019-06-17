@@ -1,6 +1,5 @@
 class CreateErrataAnnounce < ActiveRecord::Migration[4.2]
-  def change
-
+  def up
     create_table :upman_erratum do |t|
       t.string :category
       t.integer :errata_id
@@ -17,8 +16,10 @@ class CreateErrataAnnounce < ActiveRecord::Migration[4.2]
       t.string :subject
       t.json :packages
       t.timestamps null: false
-
     end
+  end
 
+  def down
+    drop_table :upman_erratum
   end
 end

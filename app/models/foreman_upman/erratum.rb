@@ -1,5 +1,5 @@
 module ForemanUpman
-  class Erratum < ActiveRecord::Base
+  class Erratum < ApplicationRecord
 
     self.table_name = 'upman_erratum'
     validates :category, presence: true

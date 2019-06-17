@@ -3,6 +3,7 @@ module ForemanUpman
 
     class Synchronize
 
+
     end
   end
 end
