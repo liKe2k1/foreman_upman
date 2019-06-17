@@ -7,34 +7,36 @@ module ForemanUpman
         # @param [String] body
         # @param [String] type Packages Type  ['depends', 'replaces', 'conflicts', 'provides', 'breaks', 'recommends' 'suggests']
         def parse(body, type)
+          package_return = nil
+
           if (package_item_match = body.match(/#{type}: (.*)/i))
             package_item_match[1].split(",").each do |package|
               guid = SecureRandom.uuid
               if (package_match = package.strip.scan(/([a-z.+0-9- ]+)(\:any)?(\(([<>=\-+~:.\w ]+)\))?( ?\|)?/))
                 package_match.each do |match|
-                  package = ::ForemanUpman::Dao::ExtPackage.new
-                  package.package = match[0].strip
-                  package.guid = guid
-                  package.type = type.downcase
+                  package_return = ::ForemanUpman::Dao::ExtPackage.new
+                  package_return.package = match[0].strip
+                  package_return.guid = guid
+                  package_return.type = type.downcase
                   unless match[3].empty?
                     if (version_mask = match[3].match(/([<>=]+) (.+)/))
-                      package.version_mask = version_mask[1]
-                      package.version = version_mask[2]
+                      package_return.version_mask = version_mask[1]
+                      package_return.version = version_mask[2]
                     else
-                      package.version = match[3]
+                      package_return.version = match[3]
                     end
                   end
                   unless match[4].empty?
                     if match[4].strip == '|'
-                      package.condition = 'OR'
+                      package_return.condition = 'OR'
                     end
                   end
-                  p package
-                  package
+
                 end
               end
             end
           end
+          package_return
         end
       end
     end

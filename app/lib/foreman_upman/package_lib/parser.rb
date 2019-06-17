@@ -31,10 +31,16 @@ module ForemanUpman
         tag = Tag.new.parse(chunk)
         body.inject_tag(tag)
 
-        depends = Package.new.parse(chunk, "Depends")
-        suggests = Package.new.parse(chunk, "Suggests")
-        recommends = Package.new.parse(chunk, "Recommends")
-        p recommends
+        body.inject_package_replaces(Package.new.parse(chunk, "Replaces"))
+        body.inject_package_depends(Package.new.parse(chunk, "Depends"))
+        body.inject_package_suggests(Package.new.parse(chunk, "Suggests"))
+        body.inject_package_recommends(Package.new.parse(chunk, "Recommends"))
+        body.inject_package_breaks(Package.new.parse(chunk, "Breaks"))
+        body.inject_package_provides(Package.new.parse(chunk, "Provides"))
+        body.inject_package_conflicts(Package.new.parse(chunk, "Conflicts"))
+
+        p body.package_dao.inspect
+
         #pp body.package_dao
       end
     end

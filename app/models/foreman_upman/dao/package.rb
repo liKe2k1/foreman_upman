@@ -13,6 +13,8 @@ module ForemanUpman
       attr_accessor :recommends
       attr_accessor :suggests
       attr_accessor :breaks
+      attr_accessor :provides
+      attr_accessor :conflicts
       attr_accessor :description
       attr_accessor :homepage
       attr_accessor :description_md5
