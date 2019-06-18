@@ -22,18 +22,12 @@ module ForemanUpman
 
 
     def _parse_release_file(body)
-
-      release_dao = ForemanUpman::Dao::Release
-
       release_data = _get_hashed_values(body)
-
       release_data['architectures'] = release_data['architectures'].gsub(/\s+/m, ' ').strip.split(" ")
       if release_data['components'].present?
         release_data['components'] = release_data['components'].gsub(/\s+/m, ' ').strip.split(" ")
       end
-
       release_data['date'] = DateTime.parse(release_data['date'])
-
       release_data
     end
 

@@ -5,8 +5,8 @@ module ForemanUpman
     def not_found(exception = nil)
       logger.debug "not found: #{exception}" if exception
       respond_to do |format|
-        format.html { render "foreman_upman/common/404", :status => :not_found }
-        format.any { head :not_found}
+        format.html {render "foreman_upman/common/404", :status => :not_found}
+        format.any {head :not_found}
       end
       true
     end
@@ -44,7 +44,7 @@ module ForemanUpman
     end
 
     def scope_for(resource, options = {})
-      controller = options.delete(:controller){ controller_permission }
+      controller = options.delete(:controller) {controller_permission}
       # don't call the #action_permission method here, we are not sure if the resource is authorized at this point
       # calling #action_permission here can cause an exception, in order to avoid this, ensure :authorized beforehand
       permission = options.delete(:permission)
@@ -70,6 +70,8 @@ module ForemanUpman
         'sync'
       when 'sync_progress'
         'sync_progress'
+      when 'sync_cancel'
+        'sync_cancel'
       else
         super
       end

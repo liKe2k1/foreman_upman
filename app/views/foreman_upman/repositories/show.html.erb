@@ -18,6 +18,14 @@
           hash_for_sync_progress_repositories_path(:id => @repository, :uuid => @sync_progress.uuid)
       )
     %>
+
+    <%=
+    display_link_if_authorized(
+        _("Cancel"),
+        hash_for_sync_cancel_repositories_path(:id => @repository, :uuid => @sync_progress.uuid),
+        { :class => 'btn btn-warning pull-right'}
+    )
+  %>
   </div>
 <% end %>
 

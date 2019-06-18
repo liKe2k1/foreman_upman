@@ -1,8 +1,15 @@
 <% title _("Package #{@package.name}") %>
 
+<%= breadcrumbs(items: [
+    {caption: _("Repositories"), url: repositories_path},
+    {caption: _("%s") % @package.repository.label, url: repository_path(@package.repository) + "#packages"},
+    {caption: _("Package %s") % @package.name, url: packages_path(@package)},
+]) %>
+
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= @package.name %> <%= @package.version %> <span class="text-success"><i class="pficon-security"></i> No security related items found</span></h3>
+    <h3 class="panel-title"><%= @package.name %> <%= @package.version %>
+      <span class="text-success"><i class="pficon-security"></i> No security related items found</span></h3>
   </div>
   <div class="panel-body">
     <div class="row">
@@ -27,13 +34,15 @@
           </tr>
           <tr>
             <td>Maintainers</td>
-            <td><% @package.maintainers.each_with_index  do |maintainer, i| %>
+            <td>
+              <% @package.maintainers.each_with_index do |maintainer, i| %>
                 <%= maintainer.name %><%= ',' if i < (@package.maintainers.size - 1) %>
               <% end %></td>
           </tr>
           <tr>
             <td>Tags</td>
-            <td><% @package.tags.each_with_index  do |tag, i| %>
+            <td>
+              <% @package.tags.each_with_index do |tag, i| %>
                 <%= tag.label %><%= ',' if i < (@package.tags.size - 1) %>
               <% end %></td>
           </tr>
@@ -85,8 +94,24 @@
           </tbody>
         </table>
 
+        <h2>Other Packages Related to basex</h2>
 
+        <div class="">
+          <span class="label" style="background-color:#89A54E">&nbsp;</span> suggests
+          <span class="label" style="background-color:#4572A7">&nbsp;</span> recommends
+          <span class="label" style="background-color:#AA4643">&nbsp;</span> depends
+        </div>
 
+        <% @package.extendeds.each do |extends| %>
+          <% if extends.extend_type == 'suggest' %>
+            <span class="label" style="background-color:#89A54E">&nbsp;</span>
+          <% end %>
+          <% if extends.extend_type == 'depends' %>
+            <span class="label" style="background-color:#AA4643">&nbsp;</span>
+      <% end %>
+          <%= extends.package %> (<%= extends.version_mask %> <%= extends.version %>)<br>
+          <br>
+        <% end %>
 
       </div>
 

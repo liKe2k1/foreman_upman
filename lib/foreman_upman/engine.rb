@@ -7,9 +7,6 @@ module ForemanUpman
     config.autoload_paths += Dir["#{config.root}/app/models/concerns"]
     config.autoload_paths += Dir["#{config.root}/app/overrides"]
     config.autoload_paths += Dir["#{config.root}/app/datatables"]
-    config.autoload_paths += Dir["#{config.root}/app/services/errata"]
-    config.autoload_paths += Dir["#{config.root}/app/services/errata/plugin"]
-
 
     config.eager_load_paths << "#{config.root}/app/lib"
 
@@ -63,7 +60,7 @@ module ForemanUpman
               :'foreman_upman/repositories' => [:destroy]
           }, :resource_type => 'ForemanUpman::Repositories'
           permission :sync_repositories, {
-              :'foreman_upman/repositories' => %i[sync sync_progress]
+              :'foreman_upman/repositories' => %i[sync sync_progress sync_cancel]
           }, :resource_type => 'ForemanUpman::Repositories'
 
           ## Repositories

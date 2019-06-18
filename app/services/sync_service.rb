@@ -26,6 +26,21 @@ class SyncService
     @sync_status.save
   end
 
+  def is_canceled()
+    sync_status = ForemanUpman::SyncStatus.where("uuid" => @sync_status.uuid).first
+    if sync_status.status == 'canceled'
+      return true
+    end
+    return false
+  end
+
+  def self.cancel(uuid)
+    sync_status = ForemanUpman::SyncStatus.where("uuid" => uuid).first
+    sync_status.status = 'canceled'
+    sync_status.save
+    sync_status
+  end
+
   def failed()
     logger.info "[SyncService] Error in sync process"
     @sync_status.status = 'failed'

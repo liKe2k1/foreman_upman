@@ -2,7 +2,11 @@
 
 <% title _("Sync repository") %>
 
-<%= breadcrumbs(items: [{caption: _('Repositories'), url: repositories_path}, {caption: _("Sync repository")}]) %>
+<%= breadcrumbs(items: [
+    {caption: _("Repositories"), url: repositories_path},
+    {caption: _("%s") % @repository.label, url: repository_path(@repository)},
+    {caption: _("Synchronization")},
+]) %>
 
 <div class="progress-description">
   <strong>Package:</strong> <span id="sync-current-package">Job is pending</span>

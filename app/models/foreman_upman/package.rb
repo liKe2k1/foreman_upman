@@ -22,6 +22,9 @@ module ForemanUpman
     has_many :package_tags, :class_name => 'ForemanUpman::PackageTags', :dependent => :delete_all
     has_many :tags, :through => :package_tags
 
+    has_many :package_extendeds, :class_name => 'ForemanUpman::PackageExtendeds', :dependent => :delete_all
+    has_many :extendeds, :through => :package_extendeds
+
     has_many :package_maintainers, :class_name => 'ForemanUpman::PackageMaintainers', :dependent => :delete_all
     has_many :maintainers, :through => :package_maintainers
 

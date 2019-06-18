@@ -1,8 +1,9 @@
+
 var updateInterval;
 
 function updateSyncStatusView(uuid) {
     updateUi(uuid);
-    updateInterval = setInterval(function() { updateUi(uuid); }, 5000);
+    updateInterval = setInterval(function() { updateUi(uuid); }, 500);
 }
 
 function updateUi(uuid) {

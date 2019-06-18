@@ -2,7 +2,7 @@ module ForemanUpman
   class RepositoriesController < ForemanUpman::ApplicationController
     include ForemanUpman::Controller::Parameters::Repositories
 
-    before_action :find_resource, only: [:show, :edit, :update, :destroy, :sync, :sync_progress]
+    before_action :find_resource, only: [:show, :edit, :update, :destroy, :sync, :sync_progress, :sync_cancel]
 
     def index
       @repositories = resource_base_search_and_page.includes(:channel)
@@ -33,15 +33,17 @@ module ForemanUpman
     end
 
     def sync
-      parser = PackageLib::Parser.new
-      parser.parse(@repository)
-      #@repository.schedule_sync
-      #redirect_to action: "index"
+      @repository.schedule_sync
       redirect_to action: "show", id: @repository.id
     end
 
     def sync_progress
       @uuid = params[:uuid]
+    end
+
+    def sync_cancel
+      sync_progress = SyncService.cancel(params[:uuid])
+      redirect_to action: "show", id: @repository.id
     end
 
     def update

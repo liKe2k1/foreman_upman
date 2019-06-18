@@ -53,8 +53,13 @@ Foreman::Application.routes.draw do
         get :auto_complete_search
         get :sync
         get :sync_progress
+        get :sync_cancel
       end
     end
 
   end
+
+  # Serve websocket cable requests in-process
+  # Planned feature for sync status.. but seems a bit overloaded for one task
+  # mount ActionCable.server => '/foreman_upman/cable'
 end

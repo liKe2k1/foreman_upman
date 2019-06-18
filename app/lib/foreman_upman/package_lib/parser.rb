@@ -15,13 +15,20 @@ module ForemanUpman
       end
 
       def parse(repository)
+
+        packages = Array.new
         package_content = fetch_repository_information(repository)
         package_chunks = package_content.split("\n\n")
         package_chunks.each do |chunk|
-          _parse_release_chunk(chunk)
+          packages.append _parse_release_chunk(chunk)
         end
+
+        packages
+
       end
 
+      # @param [String] chunk Package chunk content
+      # @return ::ForemanUpman::Dao::PackageDao
       def _parse_release_chunk(chunk)
         body = Body.new.parse(chunk)
 
@@ -31,17 +38,15 @@ module ForemanUpman
         tag = Tag.new.parse(chunk)
         body.inject_tag(tag)
 
-        body.inject_package_replaces(Package.new.parse(chunk, "Replaces"))
-        body.inject_package_depends(Package.new.parse(chunk, "Depends"))
-        body.inject_package_suggests(Package.new.parse(chunk, "Suggests"))
-        body.inject_package_recommends(Package.new.parse(chunk, "Recommends"))
-        body.inject_package_breaks(Package.new.parse(chunk, "Breaks"))
-        body.inject_package_provides(Package.new.parse(chunk, "Provides"))
-        body.inject_package_conflicts(Package.new.parse(chunk, "Conflicts"))
+        body.inject_package_replaces(Parser::Package.new.parse(chunk, "Replaces"))
+        body.inject_package_depends(Parser::Package.new.parse(chunk, "Depends"))
+        body.inject_package_suggests(Parser::Package.new.parse(chunk, "Suggests"))
+        body.inject_package_recommends(Parser::Package.new.parse(chunk, "Recommends"))
+        body.inject_package_breaks(Parser::Package.new.parse(chunk, "Breaks"))
+        body.inject_package_provides(Parser::Package.new.parse(chunk, "Provides"))
+        body.inject_package_conflicts(Parser::Package.new.parse(chunk, "Conflicts"))
 
-        p body.package_dao.inspect
-
-        #pp body.package_dao
+        body.package_dao
       end
     end
   end
