@@ -2,7 +2,7 @@ module ForemanUpman
   class RepositoriesController < ForemanUpman::ApplicationController
     include ForemanUpman::Controller::Parameters::Repositories
 
-    before_action :find_resource, only: [:show, :edit, :update, :destroy, :sync, :sync_progress, :sync_cancel]
+    before_action :find_resource, only: %i[show edit update destroy sync sync_progress sync_cancel]
 
     def index
       @repositories = resource_base_search_and_page.includes(:channel)
@@ -12,10 +12,9 @@ module ForemanUpman
       @repository = ForemanUpman::Repository.new
     end
 
-
     def show
       @repository = resource_base.includes(:channel).find(params[:id])
-      @sync_progress = SyncStatus.where("status" => "update").where("repository_id" => @repository.id).first
+      @sync_progress = SyncStatus.where('status' => 'update').or(SyncStatus.where('status' => 'preparing')).where('repository_id' => @repository.id).first
 
       @packages = Package.where("repository_id = #{@repository.id}")
     end
@@ -29,12 +28,12 @@ module ForemanUpman
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def sync
-      @repository.schedule_sync
-      redirect_to action: "show", id: @repository.id
+      job = PackageSyncService.perform_job(@repository)
+      success _("The job was queued with id #{job.job_id}")
+      redirect_to action: 'show', id: @repository.id
     end
 
     def sync_progress
@@ -43,7 +42,7 @@ module ForemanUpman
 
     def sync_cancel
       sync_progress = SyncService.cancel(params[:uuid])
-      redirect_to action: "show", id: @repository.id
+      redirect_to action: 'show', id: @repository.id
     end
 
     def update
@@ -55,10 +54,10 @@ module ForemanUpman
     end
 
     def destroy
-      unless params['object_only']
-        @repository.packages.each { |d| d.destroy }
-      else
+      if params['object_only']
         @repository.packages.delete_all
+      else
+        @repository.packages.each(&:destroy)
       end
 
       if @repository.destroy

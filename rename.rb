@@ -5,6 +5,7 @@ require 'fileutils'
 class String
   def camel_case
     return self if self !~ /_/ && self =~ /[A-Z]+.*/
+
     split('_').map(&:capitalize).join
   end
 end
@@ -43,17 +44,17 @@ end
 
 Find.find('.') do |path|
   # Change all the paths to the new snake_case name
-  if path =~ /foreman_plugin_template/i
-    new = path.gsub('foreman_plugin_template', snake)
-    # Recursively copy the directory and store the original for deletion
-    # Check for $ because we don't need to copy template/hosts for example
-    if File.directory?(path) && path =~ /foreman_plugin_template$/i
-      FileUtils.cp_r(path, new)
-      old_dirs << path
-    else
-      # gsub replaces all instances, so it will work on the new directories
-      FileUtils.mv(path, new)
-    end
+  next unless path =~ /foreman_plugin_template/i
+
+  new = path.gsub('foreman_plugin_template', snake)
+  # Recursively copy the directory and store the original for deletion
+  # Check for $ because we don't need to copy template/hosts for example
+  if File.directory?(path) && path =~ /foreman_plugin_template$/i
+    FileUtils.cp_r(path, new)
+    old_dirs << path
+  else
+    # gsub replaces all instances, so it will work on the new directories
+    FileUtils.mv(path, new)
   end
 end
 

@@ -11,12 +11,10 @@ module ForemanUpman
     validates :repository_id, presence: true
     validates :status, presence: true
 
-    belongs_to :repository, :class_name => 'ForemanUpman::Repository'
-
-
+    belongs_to :repository, class_name: 'ForemanUpman::Repository'
 
     def get_progress_in_percent
-      return ((self.packages_processed.to_f / self.packages_count.to_f) * 100).to_f.round(1)
+      ((packages_processed.to_f / packages_count.to_f) * 100).to_f.round(1)
     end
   end
 end

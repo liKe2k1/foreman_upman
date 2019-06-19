@@ -17,20 +17,18 @@ module ForemanUpman
     validates :sha265, presence: true
     validates :repository_id, presence: true
 
-    belongs_to :repository, :class_name => 'ForemanUpman::Repository'
+    belongs_to :repository, class_name: 'ForemanUpman::Repository'
 
-    has_many :package_tags, :class_name => 'ForemanUpman::PackageTags', :dependent => :delete_all
-    has_many :tags, :through => :package_tags
+    has_many :package_tags, class_name: 'ForemanUpman::PackageTags', dependent: :delete_all
+    has_many :tags, through: :package_tags
 
-    has_many :package_extendeds, :class_name => 'ForemanUpman::PackageExtendeds', :dependent => :delete_all
-    has_many :extendeds, :through => :package_extendeds
+    has_many :package_extendeds, class_name: 'ForemanUpman::PackageExtendeds', dependent: :delete_all
+    has_many :extendeds, through: :package_extendeds
 
-    has_many :package_maintainers, :class_name => 'ForemanUpman::PackageMaintainers', :dependent => :delete_all
-    has_many :maintainers, :through => :package_maintainers
-
+    has_many :package_maintainers, class_name: 'ForemanUpman::PackageMaintainers', dependent: :delete_all
+    has_many :maintainers, through: :package_maintainers
 
     scoped_search on: :name, complete_value: true, default_order: true
     scoped_search on: :version, complete_value: true, default_order: true
-
   end
 end

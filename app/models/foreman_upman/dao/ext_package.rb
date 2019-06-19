@@ -9,7 +9,6 @@ module ForemanUpman
       attr_accessor :version_mask
       attr_accessor :version
       attr_accessor :condition
-
     end
   end
 end

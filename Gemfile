@@ -2,5 +2,6 @@ source 'https://rubygems.org'
 gem 'ajax-datatables-rails'
 gem 'html2text'
 
-gemspec
+gem 'test_helper'
 
+gemspec

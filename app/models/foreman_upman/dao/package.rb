@@ -25,7 +25,6 @@ module ForemanUpman
       attr_accessor :size
       attr_accessor :md5sum
       attr_accessor :sha256
-
     end
   end
 end

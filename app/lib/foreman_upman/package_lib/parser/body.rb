@@ -2,7 +2,6 @@ module ForemanUpman
   module PackageLib
     class Parser
       class Body
-
         attr_accessor :package_dao
 
         include ForemanUpman::DebParseHelper
@@ -15,57 +14,39 @@ module ForemanUpman
         end
 
         def inject_maintainer(maintainer)
-          unless maintainer.nil?
-            @package_dao.maintainer = maintainer
-          end
+          @package_dao.maintainer = maintainer unless maintainer.nil?
         end
 
         def inject_tag(tag)
-          unless tag.nil?
-            @package_dao.tag = tag
-          end
+          @package_dao.tag = tag unless tag.nil?
         end
 
         def inject_package_replaces(replaces)
-          unless replaces.nil?
-            @package_dao.replaces = replaces
-          end
+          @package_dao.replaces = replaces unless replaces.nil?
         end
 
         def inject_package_depends(depends)
-          unless depends.nil?
-            @package_dao.depends = depends
-          end
+          @package_dao.depends = depends unless depends.nil?
         end
 
         def inject_package_suggests(suggests)
-          unless suggests.nil?
-            @package_dao.suggests = suggests
-          end
+          @package_dao.suggests = suggests unless suggests.nil?
         end
 
         def inject_package_recommends(recommends)
-          unless recommends.nil?
-            @package_dao.recommends = recommends
-          end
+          @package_dao.recommends = recommends unless recommends.nil?
         end
 
         def inject_package_breaks(breaks)
-          unless breaks.nil?
-            @package_dao.breaks = breaks
-          end
+          @package_dao.breaks = breaks unless breaks.nil?
         end
 
         def inject_package_provides(provides)
-          unless provides.nil?
-            @package_dao.provides = provides
-          end
+          @package_dao.provides = provides unless provides.nil?
         end
 
         def inject_package_conflicts(conflicts)
-          unless conflicts.nil?
-            @package_dao.conflicts = conflicts
-          end
+          @package_dao.conflicts = conflicts unless conflicts.nil?
         end
       end
     end

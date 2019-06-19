@@ -4,17 +4,17 @@ module ForemanUpman
     include ScopedSearchExtensions
     include Authorizable
 
-    belongs_to :channel, :class_name => 'ForemanUpman::Channel'
+    belongs_to :channel, class_name: 'ForemanUpman::Channel'
 
-    has_many :packages, :class_name => 'ForemanUpman::Package', dependent: :nullify
+    has_many :packages, class_name: 'ForemanUpman::Package', dependent: :nullify
 
-    has_many :sync_status, :class_name => 'ForemanUpman::SyncStatus', dependent: :nullify
+    has_many :sync_status, class_name: 'ForemanUpman::SyncStatus', dependent: :nullify
 
     validates :channel_id, presence: true
-    validates :label, presence: true, uniqueness: true, length: {maximum: 50}
+    validates :label, presence: true, uniqueness: true, length: { maximum: 50 }
 
-    validates :dist, presence: true, length: {maximum: 50}
-    validates :component, presence: true, length: {maximum: 50}
+    validates :dist, presence: true, length: { maximum: 50 }
+    validates :component, presence: true, length: { maximum: 50 }
 
     validates :gpg_key, presence: false
 
@@ -24,36 +24,25 @@ module ForemanUpman
 
     scoped_search in: :channel, on: :name, complete_value: true, rename: :channel
 
-
     def packages_count
       @packages_count ||= packages.count
     end
 
     def build_mirror_url
-      return channel.base_url + "/dists/" + self.dist + "/" + self.component
-    end
-
-
-    def schedule_sync
-      scheduler = SyncRepositoryJob
-      return scheduler.perform_later(self)
+      channel.base_url + '/dists/' + dist + '/' + component
     end
 
     def get_last_successfull_sync
-      sync_status = self.sync_status.where("repository_id = #{self.id}").last
+      sync_status = self.sync_status.where("repository_id = #{id}").last
       if sync_status.present?
-        if sync_status.status == 'finished'
-          return "Finished"
-        end
+        return 'Finished' if sync_status.status == 'finished'
         if sync_status.status == 'update'
           return "In progress (#{sync_status.get_progress_in_percent}%)"
         end
-        if sync_status.status == 'failed'
-          return "Failed"
-        end
+        return 'Failed' if sync_status.status == 'failed'
       end
 
-      return "Repository not synchronized"
+      'Repository not synchronized'
     end
   end
 end

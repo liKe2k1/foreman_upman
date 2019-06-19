@@ -1,15 +1,38 @@
 module PackageSyncService
   class << self
+    delegate :logger, to: ::Rails
 
-    delegate :logger, :to => ::Rails
+
+    def calculate_prerequisites(job, repository)
+      repo_lib = ForemanUpman::RepositoryLib::Synchronize.new
+      package_daos = repo_lib.get_packages_from_repository(repository)
+
+      p job
+      sync_service = SyncService.new
+      sync_service.create_job(
+          uuid: job.job_id,
+          repository: repository,
+          packages_count: package_daos.size
+      )
+
+      return sync_service
+    end
+
+
+    def perform_job(repository)
+      scheduler = SyncRepositoryJob
+      job = scheduler.perform_later(repository)
+      self.calculate_prerequisites(job, repository)
+      return job
+    end
+
 
     def from_dao(repository, package_dao)
-
       package = create_or_get_package(repository, package_dao)
 
       extendeds = []
-      ['depends', 'replaces', 'conflicts', 'provides', 'breaks', 'recommends', 'suggests'].each do |type|
-        package_dao.send("#{type}").each do |extends|
+      %w[depends replaces conflicts provides breaks recommends suggests].each do |type|
+        package_dao.send(type.to_s).each do |extends|
           ext = create_or_get_extendeds(type, extends)
           extendeds.append ext
         end
@@ -31,13 +54,10 @@ module PackageSyncService
       package
     end
 
-
     def create_or_get_package(repository, package_dao)
+      package = ForemanUpman::Package.where(name: package_dao.package, version: package_dao.version, repository: repository).first_or_create
 
-      package = ForemanUpman::Package.where(name: package_dao.package, version: package_dao.version).first_or_create
-
-
-      #logger.info "- Process Package #{package.name}"
+      # logger.info "- Process Package #{package.name}"
 
       package.installed_size = package_dao.installed_size
 
@@ -63,11 +83,9 @@ module PackageSyncService
       package
     end
 
-
     def create_or_get_maintainer(maintainer_dao)
-      if maintainer_dao.nil?
-        raise "Maintainer can not be unset"
-      end
+      raise 'Maintainer can not be unset' if maintainer_dao.nil?
+
       ForemanUpman::Maintainer.where(name: maintainer_dao.name, email: maintainer_dao.email).first_or_create
     end
 
@@ -75,10 +93,11 @@ module PackageSyncService
       unless tag.nil?
         return ForemanUpman::Tag.where(label: tag.label).first_or_create
       end
-      return nil
+
+      nil
     end
 
-    def create_or_get_extendeds(type, extended_dao)
+    def create_or_get_extendeds(_type, extended_dao)
       extended = ForemanUpman::Extended.where(package: extended_dao.package, extend_type: extended_dao.type, version: extended_dao.version).first_or_create
       extended.guid = extended_dao.guid
       extended.version_mask = extended_dao.version_mask
@@ -89,39 +108,33 @@ module PackageSyncService
 
     def inject_tags(package, _tags)
       _tags.each do |_tag|
-
-        unless ForemanUpman::Package.includes(:tags).where(upman_package_tags: {tags_id: _tag.id}).exists?
+        unless ForemanUpman::Package.includes(:tags).where(upman_package_tags: { tags_id: _tag.id }).exists?
           package.tags << _tag
         end
       end
-      return package
+      package
     end
-
 
     def inject_extends(package, _extends)
       _extends.each do |_extend|
-        unless _extend.nil?
-          unless ForemanUpman::Package.includes(:extendeds).where(upman_package_extended: {extendeds_id: _extend.id}).exists?
-            package.extendeds << _extend
-          end
-        end
+        next if _extend.nil?
+        next if ForemanUpman::Package.includes(:extendeds).where(upman_package_extended: { extendeds_id: _extend.id }).exists?
+
+        package.extendeds << _extend
       end
-      return package
+      package
     end
 
     def inject_maintainer(package, _maintainer)
-
       if _maintainer.nil?
-        _abort_job(package, "Cannot find Maintainer in Package %s")
+        _abort_job(package, 'Cannot find Maintainer in Package %s')
       end
 
-      unless ForemanUpman::Package.includes(:maintainers).where(upman_package_maintainers: {maintainers_id: _maintainer.id}).exists?
+      unless ForemanUpman::Package.includes(:maintainers).where(upman_package_maintainers: { maintainers_id: _maintainer.id }).exists?
         package.maintainers << _maintainer
       end
 
-
-      return package
+      package
     end
-
   end
 end

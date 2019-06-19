@@ -2,7 +2,6 @@ module ForemanUpman
   module PackageLib
     class Parser
       class Maintainer
-
         # Parse something like
         # Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
         def parse(body)

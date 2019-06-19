@@ -3,26 +3,25 @@ module ForemanUpman
     include ForemanUpman::TimingHelper
     include ForemanUpman::CompressionHelper
 
-    delegate :logger, :to => ::Rails
+    delegate :logger, to: ::Rails
 
     ##
     #  This is my first parser, feel free to optimize or modify :)
     ##
     def start_job(repository, options)
-
       synchronize = ForemanUpman::RepositoryLib::Synchronize.new
 
       tmp_file = RepositoryService.fetch_repository_information(repository)
 
       body = gunzip_file_to_string(tmp_file)
       package_chunks = body.split("\n\n")
-      last_package_name = ""
+      last_package_name = ''
 
-      sync_service = SyncService.new({
-                                         uuid: options[:uuid],
-                                         repository: repository,
-                                         packages_count: package_chunks.size
-                                     })
+      sync_service = SyncService.new(
+        uuid: options[:uuid],
+        repository: repository,
+        packages_count: package_chunks.size
+      )
       i = 0
       package_chunks.each do |chunk|
         elapsed = measure_time do
@@ -63,13 +62,11 @@ module ForemanUpman
 
     private
 
-
     def _abort_job(package, message)
-      _message = message % [package]
+      _message = format(message, package)
       sync_service.failed(_message)
       raise ParseException _message
     end
-
 
     def _inject_tags(package, _tags)
       _tags.each do |_tag|
@@ -78,29 +75,26 @@ module ForemanUpman
           package.tags << tag
         end
       end
-      return package
+      package
     end
 
     def _inject_maintainer(package, _maintainer)
-
       if _maintainer.nil?
-        _abort_job(package, "Cannot find Maintainer in Package %s")
+        _abort_job(package, 'Cannot find Maintainer in Package %s')
       end
 
       maintainer = Maintainer.where(name: _maintainer.name, email: _maintainer.email).first_or_create
       unless Package.joins(:maintainers).where('id' => package.id).exists?
         package.maintainers << maintainer
       end
-      return package
+      package
     end
 
     def _parse_regex_group(body, regex)
       body.split("\n").each do |line|
-        if line =~ regex
-          return $1
-        end
+        return Regexp.last_match(1) if line =~ regex
       end
-      return nil
+      nil
     end
 
     # Parse something like
@@ -108,10 +102,10 @@ module ForemanUpman
     def _parse_package_maintainer(body)
       body.split("\n").each do |line|
         if line =~ /^Maintainer: (.*) <(.*)>$/i
-          return Maintainer.new(name: $1, email: $2)
+          return Maintainer.new(name: Regexp.last_match(1), email: Regexp.last_match(2))
         end
       end
-      return nil
+      nil
     end
 
     # Parse something like
@@ -121,15 +115,13 @@ module ForemanUpman
     def _parse_package_tags(body)
       result = []
       body.split("\n").each do |line|
-        if line =~ /^Tag: ([a-z0-9:,\s\n]+)$/i
-          $1.strip.split(",").each do |tag|
-            result.push(Tag.new(label: tag.strip))
-          end
+        next unless line =~ /^Tag: ([a-z0-9:,\s\n]+)$/i
+
+        Regexp.last_match(1).strip.split(',').each do |tag|
+          result.push(Tag.new(label: tag.strip))
         end
       end
-      return result
+      result
     end
-
   end
 end
-

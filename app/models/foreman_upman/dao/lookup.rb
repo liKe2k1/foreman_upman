@@ -1,8 +1,7 @@
 module ForemanUpman
   module Dao
     class Lookup
-
-      delegate :logger, :to => ::Rails
+      delegate :logger, to: ::Rails
 
       include ActiveModel::Model
 

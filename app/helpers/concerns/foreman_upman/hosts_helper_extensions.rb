@@ -7,7 +7,6 @@ module ForemanUpman
     end
 
     # create or overwrite instance methods...
-    def instance_method_name
-    end
+    def instance_method_name; end
   end
 end

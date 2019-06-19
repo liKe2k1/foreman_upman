@@ -1,18 +1,15 @@
 module ForemanUpman
   module RemoteFileHelper
-
     require 'open-uri'
-    require "tmpdir"
+    require 'tmpdir'
     require 'securerandom'
 
-
     def download(url)
-
       filename = begin
-        Dir::Tmpname.make_tmpname(["x"], nil)
-      rescue NoMethodError
-        require "securerandom"
-        "#{SecureRandom.urlsafe_base64}"
+        Dir::Tmpname.make_tmpname(['x'], nil)
+                 rescue NoMethodError
+                   require 'securerandom'
+                   SecureRandom.urlsafe_base64.to_s
       end
       tmp_file = File.join(Dir.tmpdir, filename)
 
@@ -24,11 +21,9 @@ module ForemanUpman
       tmp_file
     end
 
-
     def download_to_string(url)
       tmp_file = download(url)
-      File.open(tmp_file, 'rb') { |f| f.read }
+      File.open(tmp_file, 'rb', &:read)
     end
-
   end
 end

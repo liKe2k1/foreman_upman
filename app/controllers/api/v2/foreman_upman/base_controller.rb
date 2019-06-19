@@ -9,6 +9,7 @@ module Api
 
         def resource_finder(scope, id)
           raise ActiveRecord::RecordNotFound if scope.empty?
+
           result = scope.from_param(id) if scope.respond_to?(:from_param)
           begin
             result ||= scope.friendly.find(id) if scope.respond_to?(:friendly)
@@ -28,6 +29,7 @@ module Api
         def resource_class
           @resource_class ||= resource_class_for(resource_name)
           raise NameError, "Could not find resource class for resource #{resource_name}" if @resource_class.nil?
+
           @resource_class
         end
 
@@ -36,7 +38,7 @@ module Api
         end
 
         def scope_for(resource, options = {})
-          controller = options.delete(:controller){ controller_permission }
+          controller = options.delete(:controller) { controller_permission }
           # don't call the #action_permission method here, we are not sure if the resource is authorized at this point
           # calling #action_permission here can cause an exception, in order to avoid this, ensure :authorized beforehand
           permission = options.delete(:permission)
@@ -58,19 +60,18 @@ module Api
 
         def action_permission
           case params[:action]
-            when 'connect'
-              'connect'
-            when 'planned'
-              'planned'
-            when 'connected'
-              'connected'
-            when 'disconnect'
-              'disconnect'
-            else
-              super
+          when 'connect'
+            'connect'
+          when 'planned'
+            'planned'
+          when 'connected'
+            'connected'
+          when 'disconnect'
+            'disconnect'
+          else
+            super
           end
         end
-
       end
     end
   end

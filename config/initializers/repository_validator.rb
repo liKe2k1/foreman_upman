@@ -1,8 +1,8 @@
 class RepositoryValidator < ActiveModel::EachValidator
-  RESERVED_OPTIONS = [:schemes, :no_local]
+  RESERVED_OPTIONS = %i[schemes no_local].freeze
 
   def initialize(options)
-    options.reverse_merge!(schemes: %w(http https))
+    options.reverse_merge!(schemes: %w[http https])
     options.reverse_merge!(message: :url)
     options.reverse_merge!(no_local: false)
     options.reverse_merge!(public_suffix: false)
@@ -18,7 +18,7 @@ class RepositoryValidator < ActiveModel::EachValidator
       host = uri && uri.host
       scheme = uri && uri.scheme
 
-      valid_suffix = !options.fetch(:public_suffix) || (host && PublicSuffix.valid?(host, :default_rule => nil))
+      valid_suffix = !options.fetch(:public_suffix) || (host && PublicSuffix.valid?(host, default_rule: nil))
       valid_no_local = !options.fetch(:no_local) || (host && host.include?('.'))
       valid_scheme = host && scheme && schemes.include?(scheme)
 

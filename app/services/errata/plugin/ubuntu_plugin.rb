@@ -1,7 +1,5 @@
 class UbuntuPlugin < PluginBase
-
-  delegate :logger, :to => ::Rails
-
+  delegate :logger, to: ::Rails
 
   def initialize
     @dist_code = 'ubuntu'
@@ -11,11 +9,9 @@ class UbuntuPlugin < PluginBase
     @base_url = 'https://lists.ubuntu.com/archives/ubuntu-security-announce/'
   end
 
-
   def fetch_items
-    logger.info "[UbuntuPlugin] fetch_items"
+    logger.info '[UbuntuPlugin] fetch_items'
   end
-
 
   private
 
@@ -24,5 +20,4 @@ class UbuntuPlugin < PluginBase
   def _fetch_from_web
     index_content = get_url_contents(base_url)
   end
-
 end

@@ -12,5 +12,4 @@ module ForemanUpman::Controller::Parameters::Repositories
   def repositories_params
     self.class.repositories_params_filter.filter_params(params, parameter_filter_context)
   end
-
 end

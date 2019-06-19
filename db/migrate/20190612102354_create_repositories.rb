@@ -12,6 +12,5 @@ class CreateRepositories < ActiveRecord::Migration[4.2]
     add_index :upman_repositories, :label, unique: true
 
     add_foreign_key :upman_repositories, :upman_channels, column: :channel_id
-
   end
 end

@@ -2,14 +2,11 @@ module RepositoryService
   class << self
     require 'open-uri'
 
-    delegate :logger, :to => ::Rails
+    delegate :logger, to: ::Rails
 
     def fetch_repository_information(repository)
-
       arch = 'i386'
-      if repository.channel.architecture = 'x64'
-        arch = 'amd64'
-      end
+      arch = 'amd64' if repository.channel.architecture = 'x64'
 
       package_file = repository.build_mirror_url + '/binary-' + arch + '/Packages.gz'
       tmp_file = '/tmp/' + repository.label + '.packages.gz'
@@ -20,7 +17,7 @@ module RepositoryService
         logger.error "[RepositoryService] Can't download #{package_file} #{err.message}"
       end
 
-      return tmp_file
+      tmp_file
     end
   end
 end

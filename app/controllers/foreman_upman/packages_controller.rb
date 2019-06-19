@@ -5,9 +5,9 @@ module ForemanUpman
     end
 
     def pane_table
-      #@packages = resource_base.where("repository_id = #{params[:repository_id]}")
+      # @packages = resource_base.where("repository_id = #{params[:repository_id]}")
       @package_id = params[:repository_id]
-      render :partial => 'foreman_upman/packages/list_pane'
+      render partial: 'foreman_upman/packages/list_pane'
     rescue Foreman::Exception => exception
       process_ajax_error exception
     end

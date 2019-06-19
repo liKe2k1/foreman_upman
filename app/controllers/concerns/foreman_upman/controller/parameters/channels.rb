@@ -12,5 +12,4 @@ module ForemanUpman::Controller::Parameters::Channels
   def channel_params
     self.class.channels_params_filter.filter_params(params, parameter_filter_context)
   end
-
 end

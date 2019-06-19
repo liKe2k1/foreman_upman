@@ -1,6 +1,6 @@
 module ForemanUpman
   module DebParseHelper
-    delegate :logger, :to => ::Rails
+    delegate :logger, to: ::Rails
 
     def _inject_tags(package, _tags)
       _tags.each do |_tag|
@@ -9,7 +9,7 @@ module ForemanUpman
           package.tags << tag
         end
       end
-      return package
+      package
     end
 
     def _inject_maintainer(package, _maintainer)
@@ -17,15 +17,14 @@ module ForemanUpman
       unless Package.joins(:maintainers).where('id' => package.id).exists?
         package.maintainers << maintainer
       end
-      return package
+      package
     end
-
 
     def _parse_release_file(body)
       release_data = _get_hashed_values(body)
-      release_data['architectures'] = release_data['architectures'].gsub(/\s+/m, ' ').strip.split(" ")
+      release_data['architectures'] = release_data['architectures'].gsub(/\s+/m, ' ').strip.split(' ')
       if release_data['components'].present?
-        release_data['components'] = release_data['components'].gsub(/\s+/m, ' ').strip.split(" ")
+        release_data['components'] = release_data['components'].gsub(/\s+/m, ' ').strip.split(' ')
       end
       release_data['date'] = DateTime.parse(release_data['date'])
       release_data
@@ -33,28 +32,24 @@ module ForemanUpman
 
     def _parse_regex_group(body, regex)
       body.split("\n").each do |line|
-        if line =~ regex
-          return $1
-        end
+        return Regexp.last_match(1) if line =~ regex
       end
-      return nil
+      nil
     end
-
 
     def _get_hashed_values(body)
       result = {}
       body.scan(/([\w-]+): (.+)/).each do |match|
-        key = match[0].downcase.gsub("-", "_")
+        key = match[0].downcase.tr('-', '_')
         result[key] = match[1]
       end
       result
     end
 
-
     def _get_hashed_values_simple(body)
       result = {}
       body.each_line do |line|
-        p line.split(":", 2)
+        p line.split(':', 2)
       end
       result
     end
@@ -64,10 +59,10 @@ module ForemanUpman
     def _parse_package_maintainer(body)
       body.split("\n").each do |line|
         if line =~ /^Maintainer: (.*) <(.*)>$/i
-          return Maintainer.new(name: $1, email: $2)
+          return Maintainer.new(name: Regexp.last_match(1), email: Regexp.last_match(2))
         end
       end
-      return nil
+      nil
     end
 
     # Parse something like
@@ -77,15 +72,13 @@ module ForemanUpman
     def _parse_package_tags(body)
       result = []
       body.split("\n").each do |line|
-        if line =~ /^Tag: ([a-z0-9:,\s\n]+)$/i
-          $1.strip.split(",").each do |tag|
-            result.push(Tag.new(label: tag.strip))
-          end
+        next unless line =~ /^Tag: ([a-z0-9:,\s\n]+)$/i
+
+        Regexp.last_match(1).strip.split(',').each do |tag|
+          result.push(Tag.new(label: tag.strip))
         end
       end
-      return result
+      result
     end
-
   end
 end
-

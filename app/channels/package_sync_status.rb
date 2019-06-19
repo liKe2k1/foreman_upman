@@ -1,18 +1,9 @@
 module ForemanUpman
   class PackageSyncStatusChannel < ForemanUpman::CableChannel
+    def subscribed; end
 
-    def subscribed
+    def unsubscribed; end
 
-    end
-
-
-    def unsubscribed
-
-
-    end
-
-    def speak(data)
-
-    end
+    def speak(data); end
   end
 end
