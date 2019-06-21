@@ -1,0 +1,32 @@
+<% javascript 'foreman_upman/tabbed_content' %>
+
+<% title h(@node.hostname) %>
+
+<%= breadcrumbs(items: [
+    {caption: _("Nodes"), url: nodes_path},
+    {caption: _("%s") % @node.hostname, url: node_path(@node)},
+]) %>
+
+
+<div class="btn-toolbar pull-right">
+  <%= link_to_if_authorized _('Unregister'), hash_for_node_path(:id => @node), :class => 'btn btn-danger', :data => {turbolinks: false} %>
+</div>
+
+
+<ul id="repository-tab" class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab"><%= _('Status') %></a></li>
+  <li role="presentation"><a href="#packages" aria-controls="packages" role="tab" data-toggle="tab"><%= _('Packages') %></a></li>
+  <li role="presentation"><a href="#setttings" aria-controls="setttings" role="tab" data-toggle="tab"><%= _('Settings') %></a></li>
+</ul>
+
+<div id="repository-tab-content" class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="status">
+    Status
+  </div>
+  <div role="tabpanel" class="tab-pane" id="packages">
+    Packages
+  </div>
+  <div role="tabpanel" class="tab-pane" id="setttings">
+    Setttings
+  </div>
+</div>

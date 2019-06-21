@@ -63,6 +63,11 @@ module ForemanUpman
               :'foreman_upman/repositories' => %i[sync sync_progress sync_cancel]
           }, :resource_type => 'ForemanUpman::Repositories'
 
+          ## Nodes
+          permission :view_nodes, {
+              :'foreman_upman/nodes' => [:index]
+          }, :resource_type => 'ForemanUpman::Nodes'
+
           ## Repositories
           permission :view_packages, {
               :'foreman_upman/packages' => [:index]
@@ -87,6 +92,7 @@ module ForemanUpman
         # add menu entry
         sub_menu :top_menu, :upman, :after => :infrastructure_menu, :icon => 'pficon pficon-topology', :caption => N_('Update Manager') do
           menu :top_menu, :status, :url_hash => {controller: :'foreman_upman/status', action: :index}, :caption => N_('Status')
+          menu :top_menu, :nodes, :url_hash => {controller: :'foreman_upman/nodes', action: :index}, :caption => N_('Nodes')
           menu :top_menu, :repositories, :url_hash => {controller: :'foreman_upman/repositories', action: :index}, :caption => N_('Repositories')
           menu :top_menu, :channels, :url_hash => {controller: :'foreman_upman/channels', action: :index}, :caption => N_('Channels')
           menu :top_menu, :errata, :url_hash => {controller: :'foreman_upman/errata', action: :index}, :caption => N_('Errata')

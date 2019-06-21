@@ -41,6 +41,7 @@ Foreman::Application.routes.draw do
     end
     resources :config
     resources :status
+    resources :nodes
     resources :errata do
       collection do
         get :sync
