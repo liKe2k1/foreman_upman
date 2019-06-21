@@ -17,6 +17,11 @@ Foreman::Application.routes.draw do
             get :auto_complete_search
           end
         end
+        resources :node do
+          collection do
+            post :register
+          end
+        end
         resources :channels do
           collection do
             get :auto_complete_search
