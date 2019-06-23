@@ -68,6 +68,15 @@ module ForemanUpman
               :'foreman_upman/nodes' => [:index]
           }, :resource_type => 'ForemanUpman::Nodes'
 
+          permission :installed_packages_nodes, {
+              :'foreman_upman/nodes' => [:installed_packages]
+          }, :resource_type => 'ForemanUpman::Nodes'
+
+          permission :install_history_nodes, {
+              :'foreman_upman/nodes' => [:install_history]
+          }, :resource_type => 'ForemanUpman::Nodes'
+
+
           ## Repositories
           permission :view_packages, {
               :'foreman_upman/packages' => [:index]
@@ -84,7 +93,10 @@ module ForemanUpman
             :edit_repositories,
             :destroy_repositories,
             :sync_repositories,
-            :view_packages
+            :view_packages,
+            :view_nodes,
+            :installed_packages_nodes,
+            :install_history_nodes
         ]
         role 'UpMan Manager', MANAGER
         add_all_permissions_to_default_roles

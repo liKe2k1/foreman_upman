@@ -60,14 +60,10 @@ module Api
 
         def action_permission
           case params[:action]
-          when 'connect'
-            'connect'
-          when 'planned'
-            'planned'
-          when 'connected'
-            'connected'
-          when 'disconnect'
-            'disconnect'
+          when 'installed_packages'
+            'installed_packages'
+          when 'install_history'
+            'install_history'
           else
             super
           end

@@ -1,7 +1,7 @@
 Foreman::Application.routes.draw do
   # API
-  namespace :api, defaults: { format: 'json' } do
-    scope '(:apiv)', module: :v2, defaults: { apiv: 'v2' }, apiv: /v2/, constraints: ApiConstraints.new(version: 2, default: true) do
+  namespace :api, defaults: {format: 'json'} do
+    scope '(:apiv)', module: :v2, defaults: {apiv: 'v2'}, apiv: /v2/, constraints: ApiConstraints.new(version: 2, default: true) do
       scope 'upman', module: :foreman_upman do
         resources :repository do
           collection do
@@ -20,6 +20,9 @@ Foreman::Application.routes.draw do
         resources :node do
           collection do
             post :register
+            post :install_history
+            post :installed_packages
+            get :history, concerns: [:with_datatable]
           end
         end
         resources :channels do
@@ -41,7 +44,11 @@ Foreman::Application.routes.draw do
     end
     resources :config
     resources :status
-    resources :nodes
+    resources :nodes do
+      collection do
+        get :pane_history_table
+      end
+    end
     resources :errata do
       collection do
         get :sync

@@ -1,4 +1,5 @@
 <% javascript 'foreman_upman/tabbed_content' %>
+<% javascript 'foreman_upman/node/history_list' %>
 
 <% title h(@node.hostname) %>
 
@@ -16,6 +17,7 @@
 <ul id="repository-tab" class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab"><%= _('Status') %></a></li>
   <li role="presentation"><a href="#packages" aria-controls="packages" role="tab" data-toggle="tab"><%= _('Packages') %></a></li>
+  <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab"><%= _('History') %></a></li>
   <li role="presentation"><a href="#setttings" aria-controls="setttings" role="tab" data-toggle="tab"><%= _('Settings') %></a></li>
 </ul>
 
@@ -25,6 +27,9 @@
   </div>
   <div role="tabpanel" class="tab-pane" id="packages">
     Packages
+  </div>
+  <div role="tabpanel" class="tab-pane" id="history">
+    <span data-ajax-url="<%= pane_history_table_nodes_path(:uuid => @node.uuid) %>" data-on-complete="activateHistoryDataTable"><%= spinner %> <%= _('Loading node history') %></span>
   </div>
   <div role="tabpanel" class="tab-pane" id="setttings">
     Setttings

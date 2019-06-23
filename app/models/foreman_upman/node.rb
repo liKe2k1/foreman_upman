@@ -15,5 +15,7 @@ module ForemanUpman
     scoped_search on: :rubyversion, complete_value: true, default_order: true
     scoped_search on: :operatingsystemrelease, complete_value: true, default_order: true
 
+    has_many :packages, class_name: 'ForemanUpman::NodePackage', dependent: :nullify
+    has_many :history, class_name: 'ForemanUpman::NodeHistory', dependent: :nullify
   end
 end

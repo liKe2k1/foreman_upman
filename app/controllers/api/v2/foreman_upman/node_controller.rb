@@ -21,7 +21,6 @@ module Api
         end
 
         api :POST, '/upman/node/register', N_('Register new node')
-
         def register
           node = ::ForemanUpman::Node.where("uuid = '#{node_params[:uuid]}'").first
           if node.present?
@@ -33,14 +32,28 @@ module Api
         end
 
 
-        api :POST, '/upman/node/report/installed', N_('Report installed packages')
-        def report_installed
-          host = ::ForemanUpman::Node.where("uuid = '#{node_params[:uuid]}'").first
-          if host.present?
-            p
-          end
+        api :POST, '/upman/node/installed_packages', N_('Report installed packages')
+        def installed_packages
+          NodeService.process_installed_packages(params[:uuid], params[:data])
+        end
+        api :POST, '/upman/node/install_history', N_('Report install history')
+        def install_history
+          NodeService.process_install_history(params[:uuid], params[:data])
         end
 
+        def history
+          render json: NodeHistoryDatatable.new(params, uuid: params[:uuid])
+        end
+
+
+        def action_permission
+          case params[:action]
+          when 'history'
+            :view
+          else
+            super
+          end
+        end
       end
     end
   end

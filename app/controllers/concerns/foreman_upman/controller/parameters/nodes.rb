@@ -4,12 +4,7 @@ module ForemanUpman::Controller::Parameters::Nodes
   class_methods do
     def node_params_filter
       Foreman::ParameterFilter.new(::ForemanUpman::Node).tap do |filter|
-        filter.permit :hostname, :uuid, :operatingsystem, :rubyversion, :operatingsystemrelease, :last_sync
-      end
-    end
-    def report_installed_params_filter
-      Foreman::ParameterFilter.new(::ForemanUpman::Node).tap do |filter|
-        filter.permit :hostname, :uuid, :operatingsystem, :rubyversion, :operatingsystemrelease, :last_sync
+        filter.permit :uuid, :operatingsystem, :rubyversion, :operatingsystemrelease, :last_sync
       end
     end
   end
