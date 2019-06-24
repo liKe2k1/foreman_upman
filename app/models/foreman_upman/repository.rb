@@ -10,6 +10,9 @@ module ForemanUpman
 
     has_many :sync_status, class_name: 'ForemanUpman::SyncStatus', dependent: :nullify
 
+    has_many :node_repositories, class_name: 'ForemanUpman::NodeRepositories', dependent: :delete_all
+    has_many :nodes, through: :node_repositories
+
     validates :channel_id, presence: true
     validates :label, presence: true, uniqueness: true, length: { maximum: 50 }
 

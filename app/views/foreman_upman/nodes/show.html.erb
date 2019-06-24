@@ -24,6 +24,13 @@
 <div id="repository-tab-content" class="tab-content">
   <div role="tabpanel" class="tab-pane active" id="status">
     Status
+
+    <%= _('Assigned repositories') %>
+
+    <% @node.repositories.each do |repository| %>
+        <%=repository.name %>
+
+    <% end %>
   </div>
   <div role="tabpanel" class="tab-pane" id="packages">
     Packages

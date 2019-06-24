@@ -17,5 +17,10 @@ module ForemanUpman
 
     has_many :packages, class_name: 'ForemanUpman::NodePackage', dependent: :nullify
     has_many :history, class_name: 'ForemanUpman::NodeHistory', dependent: :nullify
+
+
+    has_many :node_repositories, class_name: 'ForemanUpman::NodeRepositories'
+    has_many :repositories, through: :node_repositories
+
   end
 end
